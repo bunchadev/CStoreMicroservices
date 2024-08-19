@@ -4,6 +4,9 @@ services:
   userdb:
     image: mcr.microsoft.com/mssql/server
 
+  distributedcache:
+    image: redis
+
   user.api:
     image: ${DOCKER_REGISTRY-}userapi
     build:
@@ -11,4 +14,5 @@ services:
       dockerfile: Services/User/User.API/Dockerfile
 
 volumes:
-  sqlserver_data:
+  sqlserver_userdata:
+  redis-data:

@@ -1,7 +1,6 @@
 version: '3.4'
 
 services:
-
   userdb:
     container_name: userdb
     environment:
@@ -11,7 +10,16 @@ services:
     ports:
       - "1433:1433"
     volumes:
-      - sqlserver_data:/var/opt/mssql
+      - sqlserver_userdata:/var/opt/mssql
+    
+  distributedcache:
+    container_name: distributedcache
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
 
   user.api:
     environment:

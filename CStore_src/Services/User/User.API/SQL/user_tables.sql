@@ -4,6 +4,8 @@ BEGIN
 END
 GO
 
+USE UserDb
+
 CREATE TABLE roles (
     role_id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     role_name NVARCHAR(255) UNIQUE NOT NULL,
@@ -13,9 +15,11 @@ CREATE TABLE roles (
 
 CREATE TABLE users (
     user_id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    username NVARCHAR(255) UNIQUE NOT NULL,
     email NVARCHAR(255) UNIQUE NOT NULL,
     password NVARCHAR(255) NOT NULL,
+    auth_method NVARCHAR(50) NOT NULL,
+    CONSTRAINT chk_auth_method CHECK (auth_method IN ('credentials', 'github', 'google')),
+    is_active BIT NOT NULL DEFAULT 1,
     role_id UNIQUEIDENTIFIER FOREIGN KEY REFERENCES roles(role_id),
     created_at DATETIME2 DEFAULT SYSDATETIME(),
     updated_at DATETIME2 DEFAULT SYSDATETIME()
@@ -55,7 +59,7 @@ DECLARE @UserRoleId UNIQUEIDENTIFIER;
 SELECT @AdminRoleId = role_id FROM roles WHERE role_name = 'Admin';
 SELECT @UserRoleId = role_id FROM roles WHERE role_name = 'User';
 
-INSERT INTO users (user_id, username, email, password, role_id)
+INSERT INTO users (user_id,email, password,auth_method, role_id)
 VALUES 
-    (NEWID(), 'trungnguyen', 'tn0888888@gmail.com', '1232003', @AdminRoleId),
-    (NEWID(), 'bunchadev', 'trungvjppro1232003@gmail.com', '1232003', @UserRoleId);
+    (NEWID(), 'tn0888888@gmail.com', '1232003','credentials', @AdminRoleId),
+    (NEWID(), 'trungvjppro1232003@gmail.com', '1232003','credentials', @UserRoleId);

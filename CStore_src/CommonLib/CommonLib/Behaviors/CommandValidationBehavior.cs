@@ -3,7 +3,7 @@ using FluentValidation;
 using MediatR;
 namespace CommonLib.Behaviors
 {
-    public class ValidationBehavior<TRequest, TResponse>
+    public class CommandValidationBehavior<TRequest, TResponse>
     (IEnumerable<IValidator<TRequest>> validators)
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : ICommand<TResponse>
