@@ -4,8 +4,8 @@
     (
         string? Email,
         string? AuthMethod, 
-        string Field = "id",     
-        string Order = "asc",   
+        string? Field,     
+        string? Order,   
         int Limit = 5,    
         int Page = 1
     );

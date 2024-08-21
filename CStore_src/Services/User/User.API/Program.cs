@@ -31,17 +31,11 @@ builder.Services.AddSingleton<ISqlConnectionFactory,SqlConnectionFactory>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-builder.Services.Decorate<IUserRepository, CachedUserRepository>();
-
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
 builder.Services.AddScoped<IPasswordService, PasswordService>();
-builder.Services.AddScoped<IJwtService, JwtService>();
 
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration = builder.Configuration.GetConnectionString("Redis");
-});
+builder.Services.AddScoped<IJwtService, JwtService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

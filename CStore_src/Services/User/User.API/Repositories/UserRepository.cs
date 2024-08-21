@@ -1,6 +1,9 @@
 ﻿using Dapper;
+using StackExchange.Redis;
 using System.Data;
 using User.API.Data;
+using User.API.Models.Domain;
+using User.API.Models.Dtos;
 using User.API.Services;
 
 namespace User.API.Repositories
@@ -65,13 +68,15 @@ namespace User.API.Repositories
         public async Task<UserLoginRes> Signin(UserLoginReq user)
         {
             var userRole = await GetUserWithRole(user.Email);
-            if (userRole is null) return new UserLoginRes("", "", null);
-            if (password.VerifyPassword(userRole.Password, user.Password) == false) return new UserLoginRes("", "", null);
-            if (userRole.IsActive == false) return new UserLoginRes("", "", null);
-            UserDto userRes = new UserDto(
+            if (userRole is null) 
+               return new UserLoginRes("", "", null);
+            if (password.VerifyPassword(userRole.Password, user.Password) == false) 
+               return new UserLoginRes("", "", null);
+            if (userRole.IsActive == false) 
+               return new UserLoginRes("", "", null);
+            UserNoPasswordDto userRes = new UserNoPasswordDto(
                 userRole.UserId,
                 userRole.Email,
-                user.Password,
                 userRole.AuthMethod,
                 userRole.IsActive,
                 userRole.RoleName
@@ -88,23 +93,27 @@ namespace User.API.Repositories
             if (user is null)
             {
                 Guid? roleId = await role.GetRoleIdWithName("User");
-                if (roleId is null) return new UserLoginRes("","",null);
+                if (roleId is null) 
+                   return new UserLoginRes("","",null);
                 CreateUserDto data = new CreateUserDto
                 (
                      social.Email,
-                     "3003",
+                     "2003",
                      social.Auth,
                      "User"
                 );
                 var check = await Save(data, roleId.ToString());
-                if (check == false) return new UserLoginRes("", "", null);
+                if (check == false) 
+                   return new UserLoginRes("", "", null);
                 user = await GetUserWithRole(social.Email);
             }
-            if (user!.IsActive == false) return new UserLoginRes("", "", null);
-            UserDto userRes = new UserDto(
+            if (user!.IsActive == false) 
+               return new UserLoginRes("", "", null);
+            if (password.VerifyPassword(user.Password, "2003") == false) 
+               return new UserLoginRes("", "", null);
+            UserNoPasswordDto userRes = new UserNoPasswordDto(
                  user.UserId,
                  user.Email,
-                 user.Password,
                  user.AuthMethod,
                  user.IsActive,
                  user.RoleName
@@ -116,9 +125,80 @@ namespace User.API.Repositories
             );
         }
 
-        public async Task<List<UserDto>> GetUserPagination()
+        public async Task<PaginatedResult<ListUserDto>> GetUserPagination(UserPaginationReq request)
         {
-            return [];
+            var parameters = new
+            {
+                p_email = request.Email,
+                p_auth_method = request.AuthMethod,
+                p_field = request.Field,
+                p_order = request.Order,
+                p_page = request.Page,
+                p_limit = request.Limit,
+            };
+            using var connection = connectionFactory.Create();
+            var listUser = await connection.QueryAsync<ListUserDto>(
+                    "dbo.PaginateUsers",
+                     parameters,
+                     commandType: CommandType.StoredProcedure
+            );
+            return new PaginatedResult<ListUserDto>(
+                request.Page,
+                request.Limit,
+                listUser.Count(),
+                listUser
+            );
+        }
+
+        public async Task<bool> DeleteUser(Guid id)
+        {
+            using var connection = connectionFactory.Create();
+            connection.Open();
+            using var transaction = connection.BeginTransaction();
+            try
+            {
+                var parameters = new
+                {
+                    UserId = id,
+                };
+                await connection.ExecuteAsync("dbo.DeleteUserById", parameters, transaction, commandType: CommandType.StoredProcedure);
+                transaction.Commit();
+                return true;
+            }
+            catch (Exception)
+            {
+                transaction.Rollback();
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateUser(UpdateUserDto userDto)
+        {
+            Guid? roleId = await role.GetRoleWithId(userDto.RoleId);
+            if (roleId is null)
+               return false;
+            using var connection = connectionFactory.Create();
+            connection.Open();
+            using var transaction = connection.BeginTransaction();
+            try
+            {
+                var parameters = new
+                {
+                    p_user_id = userDto.UserId,
+                    p_email = (object)userDto.Email ?? DBNull.Value,
+                    p_password = (object)password.HashPassword(userDto.Password) ?? DBNull.Value,
+                    p_is_active = (object)userDto.IsActive ?? DBNull.Value,
+                    p_role_id = (object)roleId ?? DBNull.Value
+                };
+                await connection.ExecuteAsync("dbo.UpdateUser", parameters, transaction, commandType: CommandType.StoredProcedure);
+                transaction.Commit();
+                return true;
+            }
+            catch (Exception)
+            {
+                transaction.Rollback();
+                return false;
+            }
         }
     }
 }

@@ -4,6 +4,6 @@
     (
         string  Access_token,
         string  Refresh_token,
-        UserDto? User
+        UserNoPasswordDto? User
     );
 }
