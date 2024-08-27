@@ -4,7 +4,7 @@
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("/api/v1/User/pagination", async ([AsParameters] UserPaginationReq request,ISender sender) =>
+            app.MapGet("/api/v1/User/pagination", async ([AsParameters] UserPaginationReq request, ISender sender) =>
             {
                 var query = request.Adapt<GetListUserQuery>();
                 var response = await sender.Send(query);
@@ -13,7 +13,9 @@
                         "Get List User",
                         response
                 ));
-            });
+            }).RequireAuthorization("AdminOnly");
+
+
         }
     }
 }

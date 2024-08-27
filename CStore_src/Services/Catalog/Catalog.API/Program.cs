@@ -1,5 +1,5 @@
-using User.API.Data;
-using User.API.Services;
+using Catalog.API.Services;
+using CommonLib.Exceptions.Handler;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,15 +17,7 @@ builder.Services.AddValidatorsFromAssembly(assembly);
 
 builder.Services.AddCarter();
 
-builder.Services.AddSingleton<ISqlConnectionFactory,SqlConnectionFactory>();
-
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-
-builder.Services.AddScoped<IPasswordService, PasswordService>();
-
-builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
 
 builder.Services.AddCustomJwtAuthentication(builder.Configuration);
 
@@ -44,3 +36,4 @@ app.UseAuthorization();
 
 app.Run();
 public partial class Program { }
+

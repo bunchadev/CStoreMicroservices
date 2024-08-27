@@ -1,9 +1,6 @@
 ﻿using Dapper;
-using StackExchange.Redis;
 using System.Data;
 using User.API.Data;
-using User.API.Models.Domain;
-using User.API.Models.Dtos;
 using User.API.Services;
 
 namespace User.API.Repositories

@@ -26,7 +26,7 @@
                         "Update failed",
                         result.Status
                     );
-            });
+            }).RequireAuthorization("AdminOnly");
         }
     }
 }

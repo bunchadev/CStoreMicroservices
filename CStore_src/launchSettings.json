@@ -4,7 +4,9 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "user.api": "StartDebugging"
+        "user.api": "StartDebugging",
+        "yarpapigateway": "StartDebugging",
+        "catalog.api": "StartDebugging"
       }
     }
   }

@@ -19,7 +19,7 @@ namespace User.API.Users.DeleteUser
                         "Delete failed",
                         result.Status
                     );
-            });
+            }).RequireAuthorization("AdminOnly");
         }
     }
 }
