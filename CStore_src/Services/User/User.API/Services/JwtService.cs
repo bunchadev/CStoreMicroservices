@@ -7,7 +7,7 @@ namespace User.API.Services
 {
     public class JwtService(IConfiguration configuration) : IJwtService
     {
-        public string GenerateToken(Guid id, string role, int hours)
+        public string GenerateToken(Guid id, string role, int minutes)
         {
             var claims = new List<Claim>
             {
@@ -20,7 +20,7 @@ namespace User.API.Services
                  configuration["Jwt:Issuer"],
                  configuration["Jwt:Audience"],
                  claims,
-                 expires: DateTime.Now.AddHours(hours),
+                 expires: DateTime.Now.AddMinutes(minutes),
                  signingCredentials: credentials);
             var jwtToken = new JwtSecurityTokenHandler().WriteToken(jwt_Token);
             return jwtToken;

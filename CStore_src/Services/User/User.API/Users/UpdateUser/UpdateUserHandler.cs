@@ -1,4 +1,6 @@
-﻿namespace User.API.Users.UpdateUser
+﻿using User.API.Models.Dtos.UserDtos;
+
+namespace User.API.Users.UpdateUser
 {
     public record UpdateUserCommand(
         Guid UserId,

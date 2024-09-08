@@ -27,10 +27,15 @@ CREATE TABLE users (
 
 CREATE TABLE tokens (
     token_id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    user_id UNIQUEIDENTIFIER FOREIGN KEY REFERENCES users(user_id) ON DELETE CASCADE,
+    user_id UNIQUEIDENTIFIER NOT NULL,
     token NVARCHAR(MAX) NOT NULL,
     expires_at DATETIME NOT NULL,
-    created_at DATETIME DEFAULT SYSDATETIME()
+    created_at DATETIME DEFAULT SYSDATETIME(),
+    is_revoked BIT DEFAULT 0,
+    
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    
+    UNIQUE (user_id)
 );
 
 CREATE TABLE permissions (

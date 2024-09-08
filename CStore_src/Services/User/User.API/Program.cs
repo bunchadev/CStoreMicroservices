@@ -23,6 +23,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 
 builder.Services.AddScoped<IJwtService, JwtService>();

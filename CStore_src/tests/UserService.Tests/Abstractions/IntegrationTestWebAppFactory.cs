@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestPlatform.TestHost;
 using System.Data;
 using Testcontainers.MsSql;
 using User.API.Data;
+using User.API.Models.Dtos.UserDtos.Data;
 using UserService.Tests.Data;
 
 namespace UserService.Tests.Abstractions

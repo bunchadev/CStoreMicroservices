@@ -1,4 +1,6 @@
-﻿namespace User.API.Users.CreateUser
+﻿using User.API.Models.Dtos.UserDtos;
+
+namespace User.API.Users.CreateUser
 {
     public record CreateUserCommand(
         string Email,

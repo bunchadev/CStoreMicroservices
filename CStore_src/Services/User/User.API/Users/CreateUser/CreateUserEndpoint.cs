@@ -29,7 +29,7 @@
                     "Save failed",
                     response.Status
                 ));
-            }).RequireAuthorization("AdminOnly");
+            });
         }
     }
 }

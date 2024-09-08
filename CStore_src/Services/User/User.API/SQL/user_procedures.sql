@@ -93,10 +93,10 @@ END;
 GO
 
 
-DROP PROCEDURE dbo.DeleteUserById
+-- DROP PROCEDURE dbo.DeleteUserById
 
-DROP PROCEDURE dbo.PaginateUsers;
+-- DROP PROCEDURE dbo.PaginateUsers;
 
-DROP PROCEDURE dbo.InsertUser; 
+-- DROP PROCEDURE dbo.InsertUser; 
 
-DROP PROCEDURE dbo.UpdateUser;
+-- DROP PROCEDURE dbo.UpdateUser;

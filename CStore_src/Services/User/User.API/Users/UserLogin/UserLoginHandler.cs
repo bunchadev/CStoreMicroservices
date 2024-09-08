@@ -1,4 +1,6 @@
-﻿namespace User.API.Users.UserLogin
+﻿using User.API.Models.Dtos.UserDtos;
+
+namespace User.API.Users.UserLogin
 {
     public record UserLoginQuery(string Email, string Password) : IQuery<UserLoginRes>;
     public class UserLoginQueryValidator : AbstractValidator<UserLoginQuery>

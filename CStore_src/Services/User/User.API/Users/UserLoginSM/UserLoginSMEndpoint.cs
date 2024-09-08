@@ -1,4 +1,6 @@
-﻿namespace User.API.Users.UserLoginSM
+﻿using User.API.Models.Dtos.UserDtos;
+
+namespace User.API.Users.UserLoginSM
 {
     public class UserLoginSMEndpoint : ICarterModule
     {

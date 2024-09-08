@@ -1,3 +1,4 @@
+using Catalog.API.Repositories;
 using Catalog.API.Services;
 using CommonLib.Exceptions.Handler;
 
@@ -18,6 +19,10 @@ builder.Services.AddValidatorsFromAssembly(assembly);
 builder.Services.AddCarter();
 
 builder.Services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+builder.Services.AddScoped<IGenresRepository, GenresRepository>();
 
 builder.Services.AddCustomJwtAuthentication(builder.Configuration);
 

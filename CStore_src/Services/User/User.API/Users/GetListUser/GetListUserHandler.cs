@@ -1,4 +1,6 @@
-﻿namespace User.API.Users.GetListUser
+﻿using User.API.Models.Dtos.UserDtos;
+
+namespace User.API.Users.GetListUser
 {
     public record GetListUserQuery(
         string? Email,

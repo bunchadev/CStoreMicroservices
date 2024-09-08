@@ -1,13 +1,11 @@
-﻿namespace User.API.Models.Dtos
+﻿namespace User.API.Models.Dtos.UserDtos
 {
-    public record ListUserDto
+    public record UserNoPasswordDto
     (
         Guid UserId,
         string Email,
-        string Password,
         string AuthMethod,
         bool IsActive,
-        DateTime UpdatedAt,
         string RoleName
     );
 }

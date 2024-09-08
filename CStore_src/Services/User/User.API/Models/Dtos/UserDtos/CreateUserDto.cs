@@ -1,4 +1,4 @@
-﻿namespace User.API.Models.Dtos
+﻿namespace User.API.Models.Dtos.UserDtos
 {
     public record CreateUserDto
     (

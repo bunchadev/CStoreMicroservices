@@ -15,8 +15,8 @@ services:
   catalogdb:
     container_name: catalogdb
     environment:
-      - POSTGRES_USER=trung
-      - POSTGRES_PASSWORD=trung
+      - POSTGRES_USER=trung1
+      - POSTGRES_PASSWORD=trung1
       - POSTGRES_DB=CatalogDb
     restart: always
     ports:
@@ -24,6 +24,18 @@ services:
     volumes:
       - postgres_catalogdata:/var/lib/postgresql/data/
   
+  reviewdb:
+    container_name: reviewdb
+    environment:
+      - POSTGRES_USER=trung2
+      - POSTGRES_PASSWORD=trung2
+      - POSTGRES_DB=ReviewDb
+    restart: always
+    ports:
+        - "5433:5432"
+    volumes:
+      - postgres_reviewdata:/var/lib/postgresql/data/
+
   distributedcache:
     container_name: distributedcache
     restart: always
@@ -55,6 +67,8 @@ services:
       - ASPNETCORE_HTTPS_PORTS=8081
     depends_on:
       - user.api
+      - catalog.api
+      - review.api
     ports:
       - "6004:8080"
       - "6064:8081"
@@ -67,7 +81,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
-      - ConnectionStrings__Database=Server=catalogdb;Port=5432;Database=CatalogDb;User Id=trung;Password=trung;Include Error Detail=true
+      - ConnectionStrings__Database=Server=catalogdb;Port=5432;Database=CatalogDb;User Id=trung1;Password=trung1;Include Error Detail=true
     depends_on:
       - catalogdb
     ports:
@@ -76,3 +90,19 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  review.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__Database=Server=reviewdb;Port=5432;Database=ReviewDb;User Id=trung2;Password=trung2;Include Error Detail=true
+    depends_on:
+      - reviewdb
+    ports:
+      - "6002:8080"
+      - "6062:8081"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+

@@ -7,6 +7,9 @@ services:
   catalogdb:
     image: postgres
 
+  reviewdb:
+    image: postgres
+
   distributedcache:
     image: redis
 
@@ -28,9 +31,19 @@ services:
       context: .
       dockerfile: Services/Catalog/Catalog.API/Dockerfile
 
+  review.api:
+    image: ${DOCKER_REGISTRY-}reviewapi
+    build:
+      context: .
+      dockerfile: Services/Review/Review.API/Dockerfile
+
 volumes:
   sqlserver_userdata:
   postgres_catalogdata:
+  postgres_reviewdata:
   redis-data:
+  
+
+
 
 
